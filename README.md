@@ -1,127 +1,98 @@
-# StudyForge API
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
 
-REST API construída com NestJS, Prisma e PostgreSQL. Alimenta a plataforma StudyForge com autenticação, gerenciamento de conteúdo e agentes de estudo com RAG.
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-## Tecnologias
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-- **[NestJS](https://nestjs.com/)** — framework Node.js progressivo e estruturado
-- **[Clerk](https://clerk.com/)** — autenticação e validação de sessões via JWT
-- **[Prisma](https://www.prisma.io/)** — ORM com tipagem e migrations
-- **[PostgreSQL](https://www.postgresql.org/)** + **[pgvector](https://github.com/pgvector/pgvector)** — banco de dados relacional com suporte a embeddings
-- **[Zod](https://zod.dev/)** — validação de schemas compartilhada com o frontend
-- **[BullMQ](https://docs.bullmq.io/)** — filas para indexação assíncrona das documentações
-- **[Redis](https://redis.io/)** — cache e backend das filas
-- **[Gemini API](https://ai.google.dev/)** — LLM e embeddings para os agentes de estudo
+## Description
 
-## Funcionalidades
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-- **Autenticação** — rotas protegidas via token JWT emitido pelo Clerk
-- **Posts** — CRUD completo com suporte a MDX e tags por tecnologia
-- **Agentes de Estudo** — pipeline de RAG que indexa documentações oficiais e responde perguntas com base nelas
-- **Roadmaps** — criação e acompanhamento de trilhas de estudo
-- **Snippets** — gerenciamento de trechos de código por categoria
-
-## Primeiros Passos
-
-### Pré-requisitos
-
-- Node.js 20+
-- Docker e Docker Compose
-
-### Rodando localmente
+## Project setup
 
 ```bash
-# Clone o repositório
-git clone https://github.com/seu-usuario/studyforge-api
-cd studyforge-api
-
-# Instale as dependências
-npm install
-
-# Suba os serviços necessários (PostgreSQL com pgvector e Redis)
-docker compose up -d
-
-# Copie as variáveis de ambiente
-cp .env.example .env
-
-# Execute as migrations do banco
-npx prisma migrate dev
-
-# Inicie o servidor de desenvolvimento
-npm run start:dev
+$ npm install
 ```
 
-A API estará disponível em [http://localhost:3333](http://localhost:3333).
+## Compile and run the project
 
-### Variáveis de ambiente
+```bash
+# development
+$ npm run start
 
-```env
-# Banco de dados
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/studyforge
+# watch mode
+$ npm run start:dev
 
-# Redis
-REDIS_URL=redis://localhost:6379
-
-# Clerk — copie as chaves do dashboard em https://clerk.com
-CLERK_SECRET_KEY=
-CLERK_PUBLISHABLE_KEY=
-
-# LLM — use o Gemini (plano gratuito) ou aponte para o Ollama local
-GEMINI_API_KEY=
-
-# App
-PORT=3333
+# production mode
+$ npm run start:prod
 ```
 
-## Estrutura do Projeto
+## Run tests
 
-```
-src/
-├── modules/
-│   ├── auth/             # Guard que valida o token JWT do Clerk
-│   ├── users/            # Sincronização do usuário via webhook do Clerk
-│   ├── posts/            # Knowledge hub — CRUD de posts
-│   ├── snippets/         # Snippet vault
-│   ├── roadmaps/         # Roadmap builder
-│   └── agents/           # Agentes de estudo com RAG
-│       ├── indexer/      # Workers de indexação das docs (BullMQ)
-│       ├── embeddings/   # Geração e busca de embeddings (pgvector)
-│       └── chat/         # Endpoint de chat com streaming
-├── common/
-│   ├── decorators/       # Decorators customizados
-│   ├── filters/          # Exception filters globais
-│   ├── guards/           # Guard de autenticação (Clerk JWT)
-│   └── pipes/            # Pipes de validação com Zod
-├── config/               # Configurações de ambiente
-└── prisma/               # Schema e migrations do banco
+```bash
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
 ```
 
-## Como o RAG funciona
+## Deployment
 
-```
-Documentação oficial
-      ↓
-  Divisão em chunks (BullMQ worker)
-      ↓
-  Geração de embeddings (Gemini)
-      ↓
-  Armazenamento no pgvector
-      ↓
-Pergunta do usuário → embedding
-      ↓
-  Busca por similaridade no pgvector
-      ↓
-  Prompt montado com os chunks relevantes
-      ↓
-  LLM responde com base nas docs reais
+When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+
+If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+
+```bash
+$ npm install -g @nestjs/mau
+$ mau deploy
 ```
 
-## Como a autenticação funciona
+With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-O Clerk gerencia todo o fluxo de login no frontend. A API recebe o token JWT em cada requisição e valida a assinatura usando a chave pública do Clerk — sem precisar consultar nenhum serviço externo a cada chamada.
+## Resources
 
-Quando um usuário se cadastra pela primeira vez, o Clerk dispara um **webhook** para a API criar o registro correspondente no banco local, mantendo os dados do usuário sincronizados.
+Check out a few resources that may come in handy when working with NestJS:
 
-## Relacionados
+- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
+- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
+- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
+- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
+- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
+- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
+- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
+- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
-- [studyforge-web](https://github.com/seu-usuario/studyforge-web) — o frontend em Next.js que consome esta API
+## Support
+
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+
+## Stay in touch
+
+- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
+
+## License
+
+Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
